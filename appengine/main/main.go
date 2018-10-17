@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"fmt"
 	"encoding/json"
@@ -36,8 +37,8 @@ func mltask(w http.ResponseWriter, r *http.Request) {
 	// jsonをデコードする
 	//input, err := json.Marshal(params)
 	
-	fmt.Fprintln(w, "params")
-	fmt.Fprintln(w, params)
+	// fmt.Fprintln(w, "params")
+	// fmt.Fprintln(w, params)
 	
 	ctx := appengine.NewContext(r)
 	task := taskqueue.NewPOSTTask("/ml", map[string][]string{"data": {"aaa"}})
