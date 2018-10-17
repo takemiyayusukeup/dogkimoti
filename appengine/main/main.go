@@ -6,7 +6,6 @@ package main
 
 import (
 	"net/http"
-	"net/url"
 	"fmt"
 	"encoding/json"
 
@@ -35,9 +34,9 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	var modelid = "ICN4592178324928500759"
 	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
-	params := M{
-		"payload" : M{
-			"image" : M{ "imageBytes" : data },
+	params := Maps{
+		"payload" : Maps{
+			"image" : Maps{ "imageBytes" : data },
 		},
 	}
 
@@ -59,11 +58,11 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "taskqueue.Add")
 }
 
-func NewJsonPOSTTask(path string, params Maps) *Task {
+func NewJsonPOSTTask(path string, params Maps) *taskqueue.Task {
     h := make(http.Header)
     h.Set("Content-Type", "application/json")
     data, _ := json.Marshal(params) // TODO エラー捨ててるYO.
-    return &Task{
+    return &taskqueue.Task{
         Path:    path,
         Payload: []byte(data),
         Header:  h,
