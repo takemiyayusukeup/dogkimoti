@@ -48,7 +48,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, input)
 	
 	ctx := appengine.NewContext(r)
-	task := taskqueue.NewPOSTTask(url, bytes.NewBuffer(input))
+	task := taskqueue.NewPOSTTask(url, input)
 	if _, err := taskqueue.Add(ctx, task, ""); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			fmt.Fprintln(w, "err")
