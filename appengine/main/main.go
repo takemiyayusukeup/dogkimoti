@@ -23,10 +23,10 @@ func test(w http.ResponseWriter, r *http.Request) {
 func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "ml!")
 
-	image = ""
-	projectid = "dogkimoti"
-	modelid = "ICN4592178324928500759"
-	url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
+	var image = ""
+	var projectid = "dogkimoti"
+	var modelid = "ICN4592178324928500759"
+	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
 	// params = 
 	// payload {
@@ -34,18 +34,18 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// 		imageBytes: image
 	// 	}
 	// }
-	params = payload {}
-	payload.image.imageBytes = image
+	var params = payload {}
+	params.payload.image.imageBytes = image
 
 	// jsonをデコードする
-	input, err := json.Marshal(params)
+	var input, err := json.Marshal(params)
 	
 	fmt.Fprintln(w, "input")
 	fmt.Fprintln(w, input)
 
 	//params = {}
 	//request = prediction_client.predict(modelid, payload, params)
-	response, err := http.Post(url, "application/json", bytes.NewBuffer(input))
+	var response, neterr := http.Post(url, "application/json", bytes.NewBuffer(input))
 
 	fmt.Fprintln(w, "response")
 	fmt.Fprintln(w, response)
