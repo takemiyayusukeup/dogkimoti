@@ -16,6 +16,7 @@ import (
 
 func main() {
 	http.HandleFunc("/test", test)
+	http.HandleFunc("/mltask", mltask)
 	http.HandleFunc("/ml", ml)
 	appengine.Main()
 }
@@ -24,21 +25,13 @@ func test(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "test!")
 }
 
-type Maps map[string]interface{}
 
-func ml(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "ml!")
+func mltask(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "mltask!")
 
-	var data = ""
-	var projectid = "dogkimoti"
-	var modelid = "ICN4592178324928500759"
-	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
-
-	params := Maps{
-		"payload" : Maps{
-			"image" : Maps{ "imageBytes" : data },
-		},
-	}
+	//var projectid = "dogkimoti"
+	//var modelid = "ICN4592178324928500759"
+	//var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
 	// jsonをデコードする
 	//input, err := json.Marshal(params)
@@ -47,7 +40,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, params)
 	
 	ctx := appengine.NewContext(r)
-	task := NewJsonPOSTTask(url, params)
+	task := taskqueue.NewPOSTTask("/ml", map[string][]string{"data": "aaa"})
 	if _, err := taskqueue.Add(ctx, task, ""); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			fmt.Fprintln(w, "err")
@@ -58,14 +51,55 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "taskqueue.Add")
 }
 
-func NewJsonPOSTTask(path string, params Maps) *taskqueue.Task {
-    h := make(http.Header)
-    h.Set("Content-Type", "application/json")
-    data, _ := json.Marshal(params) // TODO エラー捨ててるYO.
-    return &taskqueue.Task{
-        Path:    path,
-        Payload: []byte(data),
-        Header:  h,
-        Method:  "POST",
-    }
+type Maps map[string]interface{}
+
+func ml(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "ml!")
+
+	var projectid = "dogkimoti"
+	var modelid = "ICN4592178324928500759"
+	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
+	data := r.FormValue("data")
+
+	params := Maps{
+		"payload" : Maps{
+			"image" : Maps{ "imageBytes" : data },
+		},
+	}
+    input, err := json.Marshal(params)
+	if err != nil {
+		fmt.Fprintln(w, "json.Marshal err")
+		fmt.Fprintln(w, err)
+		return
+	}
+	// ctx := appengine.NewContext(r)
+	// task := NewJsonPOSTTask(url, params)
+	// if _, err := taskqueue.Add(ctx, task, ""); err != nil {
+	// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 		fmt.Fprintln(w, "err")
+	// 		fmt.Fprintln(w, err)
+	// 		return
+	// }
+    response, err := http.Post(url, "application/json", bytes.NewBuffer(input))
+	if err != nil {
+		fmt.Fprintln(w, "http.Post err")
+		fmt.Fprintln(w, err)
+		return
+	}
+
+    fmt.Fprintln(w, "response")
+    fmt.Fprintln(w, response)
+	fmt.Fprintln(w, "ml end")
 }
+
+// func NewJsonPOSTTask(path string, params Maps) *taskqueue.Task {
+//     h := make(http.Header)
+//     h.Set("Content-Type", "application/json")
+//     data, _ := json.Marshal(params) // TODO エラー捨ててるYO.
+//     return &taskqueue.Task{
+//         Path:    path,
+//         Payload: []byte(data),
+//         Header:  h,
+//         Method:  "POST",
+//     }
+// }
