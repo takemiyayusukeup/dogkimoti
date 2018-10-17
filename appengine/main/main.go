@@ -9,7 +9,10 @@ import (
 	"net/http"
 	"fmt"
 	"encoding/json"
+
 	"google.golang.org/appengine"
+
+	"google.golang.org/appengine/taskqueue"
 )
 
 func main() {
@@ -32,18 +35,6 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	var modelid = "ICN4592178324928500759"
 	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
-	// params = 
-	// payload {
-	// 	image {
-	// 		imageBytes: image
-	// 	}
-	// }
-	//var params = map[string]interface{}
-
-	// image := { "imageBytes" : data }
-	// params := { "image" : image }
-	//params.payload.image.imageBytes = image
-
 	params := M{
 		"payload" : M{
 			"image" : M{ "imageBytes" : data },
@@ -55,15 +46,15 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	
 	fmt.Fprintln(w, "input")
 	fmt.Fprintln(w, input)
-	fmt.Fprintln(w, "err")
-	fmt.Fprintln(w, err)
+	
+	ctx := appengine.NewContext(r)
+	task := taskqueue.NewPOSTTask(url, bytes.NewBuffer(input))
+	if _, err := taskqueue.Add(ctx, task, ""); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			fmt.Fprintln(w, "err")
+			fmt.Fprintln(w, err)
+			return
+	}
 
-	//params = {}
-	//request = prediction_client.predict(modelid, payload, params)
-	response, err := http.Post(url, "application/json", bytes.NewBuffer(input))
-
-	fmt.Fprintln(w, "response")
-	fmt.Fprintln(w, response)
-	fmt.Fprintln(w, "err")
-	fmt.Fprintln(w, err)
+	fmt.Fprintln(w, "taskqueue.Add")
 }
