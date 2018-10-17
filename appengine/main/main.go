@@ -25,7 +25,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "ml!")
 
-	var image = ""
+	var data = ""
 	var projectid = "dogkimoti"
 	var modelid = "ICN4592178324928500759"
 	var url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
@@ -36,8 +36,11 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// 		imageBytes: image
 	// 	}
 	// }
-	var params = payload {}
-	params.payload.image.imageBytes = image
+	//var params = map[string]interface{}
+	var image = map[string]interface{}
+	image = { "imageBytes" : data }
+	params := { "image" : image }
+	//params.payload.image.imageBytes = image
 
 	// jsonをデコードする
 	input, err := json.Marshal(params)
