@@ -5,8 +5,10 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"fmt"
+	"encoding/json"
 	"google.golang.org/appengine"
 )
 
@@ -34,7 +36,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// 		imageBytes: image
 	// 	}
 	// }
-	params := payload {}
+	var params = payload {}
 	params.payload.image.imageBytes = image
 
 	// jsonをデコードする
