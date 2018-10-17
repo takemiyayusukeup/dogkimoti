@@ -40,7 +40,7 @@ func mltask(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, params)
 	
 	ctx := appengine.NewContext(r)
-	task := taskqueue.NewPOSTTask("/ml", map[string][]string{"data": "aaa"})
+	task := taskqueue.NewPOSTTask("/ml", map[string][]string{"data": {"aaa"}})
 	if _, err := taskqueue.Add(ctx, task, ""); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			fmt.Fprintln(w, "err")
