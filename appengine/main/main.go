@@ -29,7 +29,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
 	params = 
-	payload : {
+	payload {
 		image: {
 			imageBytes: image
 		}
@@ -40,7 +40,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 
 	//params = {}
 	//request = prediction_client.predict(modelid, payload, params)
-	response, err := http.Post(url, "application/json", payload)
+	response, err := http.Post(url, "application/json", bytes.NewBuffer(input))
 
 	fmt.Fprintln(w, "response")
 	fmt.Fprintln(w, response)
