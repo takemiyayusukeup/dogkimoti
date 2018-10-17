@@ -6,11 +6,15 @@ package main
 
 import (
 	"net/http"
-	"./mlif"
+	"fmt"
 	"google.golang.org/appengine"
 )
 
 func main() {
-	http.HandleFunc("/test", mlif.test)
+	http.HandleFunc("/test", test)
 	appengine.Main()
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "test!")
 }
