@@ -6,11 +6,11 @@ package main
 
 import (
 	"net/http"
-	"./mlcall"
+	"./mlif"
 	"google.golang.org/appengine"
 )
 
 func main() {
-	http.HandleFunc("/test", mlcall.test)
+	http.HandleFunc("/test", mlif.test)
 	appengine.Main()
 }
