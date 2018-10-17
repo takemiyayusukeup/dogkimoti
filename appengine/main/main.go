@@ -28,15 +28,20 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	modelid = "ICN4592178324928500759"
 	url = "https://beta-dot-custom-vision.appspot.com/v1beta1/projects/" + projectid + "/locations/us-central1/models/" + modelid + ":predict "
 
-	params = 
-	payload {
-		image {
-			imageBytes: image
-		}
-	}
+	// params = 
+	// payload {
+	// 	image {
+	// 		imageBytes: image
+	// 	}
+	// }
+	params = payload {}
+	payload.image.imageBytes = image
 
 	// jsonをデコードする
 	input, err := json.Marshal(params)
+	
+	fmt.Fprintln(w, "input")
+	fmt.Fprintln(w, input)
 
 	//params = {}
 	//request = prediction_client.predict(modelid, payload, params)
