@@ -46,8 +46,8 @@ func ml(w http.ResponseWriter, r *http.Request) {
 
 	params := M{
 		"payload" : M{
-			"image" : M{ "imageBytes" : data }
-		}
+			"image" : M{ "imageBytes" : data },
+		},
 	}
 
 	// jsonをデコードする
