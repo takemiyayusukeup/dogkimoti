@@ -30,7 +30,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 
 	params = 
 	payload {
-		image: {
+		image {
 			imageBytes: image
 		}
 	}
