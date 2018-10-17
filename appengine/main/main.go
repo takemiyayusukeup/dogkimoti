@@ -25,7 +25,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "test!")
 }
 
-type M map[string]interface{}
+type Maps map[string]interface{}
 
 func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "ml!")
@@ -59,7 +59,7 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "taskqueue.Add")
 }
 
-func NewJsonPOSTTask(path string, params url.Values) *Task {
+func NewJsonPOSTTask(path string, params Maps) *Task {
     h := make(http.Header)
     h.Set("Content-Type", "application/json")
     data, _ := json.Marshal(params) // TODO エラー捨ててるYO.
