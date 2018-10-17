@@ -7,15 +7,12 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"mlcall"
 
 	"google.golang.org/appengine"
 )
 
 func main() {
-	http.HandleFunc("/test", handle)
+	http.HandleFunc("/test", mlcall.test)
 	appengine.Main()
-}
-
-func handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "test!")
 }
