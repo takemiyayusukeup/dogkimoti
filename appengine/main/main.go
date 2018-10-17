@@ -22,6 +22,8 @@ func test(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "test!")
 }
 
+type M map[string]interface{}
+
 func ml(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "ml!")
 
@@ -38,9 +40,15 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// }
 	//var params = map[string]interface{}
 
-	image := { "imageBytes" : data }
-	params := { "image" : image }
+	// image := { "imageBytes" : data }
+	// params := { "image" : image }
 	//params.payload.image.imageBytes = image
+
+	params := M{
+		"payload" : M{
+			"image" : M{ "imageBytes" : data }
+		}
+	}
 
 	// jsonをデコードする
 	input, err := json.Marshal(params)
