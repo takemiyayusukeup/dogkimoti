@@ -5,7 +5,6 @@
 package main
 
 import (
-	"bytes"
 	"net/http"
 	"fmt"
 	"encoding/json"
@@ -42,13 +41,13 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// jsonをデコードする
-	input, err := json.Marshal(params)
+	//input, err := json.Marshal(params)
 	
-	fmt.Fprintln(w, "input")
-	fmt.Fprintln(w, input)
+	fmt.Fprintln(w, "params")
+	fmt.Fprintln(w, params)
 	
 	ctx := appengine.NewContext(r)
-	task := taskqueue.NewPOSTTask(url, input)
+	task := NewJsonPOSTTask(url, params)
 	if _, err := taskqueue.Add(ctx, task, ""); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			fmt.Fprintln(w, "err")
@@ -57,4 +56,16 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintln(w, "taskqueue.Add")
+}
+
+func NewJsonPOSTTask(path string, params url.Values) *Task {
+    h := make(http.Header)
+    h.Set("Content-Type", "application/json")
+    data, _ := json.Marshal(params) // TODO エラー捨ててるYO.
+    return &Task{
+        Path:    path,
+        Payload: []byte(data),
+        Header:  h,
+        Method:  "POST",
+    }
 }
