@@ -37,8 +37,8 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// 	}
 	// }
 	//var params = map[string]interface{}
-	var image = map[string]interface{}
-	image = { "imageBytes" : data }
+
+	image := { "imageBytes" : data }
 	params := { "image" : image }
 	//params.payload.image.imageBytes = image
 
