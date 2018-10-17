@@ -34,18 +34,18 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	// 		imageBytes: image
 	// 	}
 	// }
-	var params = payload {}
+	params := payload {}
 	params.payload.image.imageBytes = image
 
 	// jsonをデコードする
-	var input, err := json.Marshal(params)
+	input, err := json.Marshal(params)
 	
 	fmt.Fprintln(w, "input")
 	fmt.Fprintln(w, input)
 
 	//params = {}
 	//request = prediction_client.predict(modelid, payload, params)
-	var response, neterr := http.Post(url, "application/json", bytes.NewBuffer(input))
+	response, err := http.Post(url, "application/json", bytes.NewBuffer(input))
 
 	fmt.Fprintln(w, "response")
 	fmt.Fprintln(w, response)
