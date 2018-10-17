@@ -55,6 +55,8 @@ func ml(w http.ResponseWriter, r *http.Request) {
 	
 	fmt.Fprintln(w, "input")
 	fmt.Fprintln(w, input)
+	fmt.Fprintln(w, "err")
+	fmt.Fprintln(w, err)
 
 	//params = {}
 	//request = prediction_client.predict(modelid, payload, params)
@@ -62,4 +64,6 @@ func ml(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintln(w, "response")
 	fmt.Fprintln(w, response)
+	fmt.Fprintln(w, "err")
+	fmt.Fprintln(w, err)
 }
